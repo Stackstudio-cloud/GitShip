@@ -1,10 +1,24 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { applySecurity } from "./security";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Apply security middleware
+applySecurity(app);
+
+// Use body parsers for everything except the GitHub webhook endpoint,
+// which requires raw body for signature verification
+app.use((req, res, next) => {
+  if (req.path === "/api/webhooks/github") {
+    return next();
+  }
+  return (express.json() as any)(req, res, (err: any) => {
+    if (err) return next(err);
+    return (express.urlencoded({ extended: false }) as any)(req, res, next);
+  });
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

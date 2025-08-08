@@ -1,10 +1,16 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { insertProjectSchema, insertDeploymentSchema } from "@shared/schema";
-import { GitHubService } from "./github";
+import { GitHubService, verifyGitHubWebhookSignature } from "./github";
+import { decryptText, encryptText, isEncrypted } from "./crypto";
+import { BuildQueue } from "./build";
+import path from "path";
+import fs from "fs";
+import { getArtifactsRoot } from "./artifacts";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -43,16 +49,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Exchange code for access token
-      const accessToken = await GitHubService.exchangeCodeForToken(code as string);
+      const encryptedToken = await GitHubService.exchangeCodeForToken(code as string);
       
       // Get GitHub user info
-      const githubService = new GitHubService(accessToken);
+      const githubService = new GitHubService(decryptText(encryptedToken));
       const githubUser = await githubService.getCurrentUser();
       
       // Update user with GitHub info
       const userId = req.user.claims.sub;
       await storage.updateUserGitHubInfo(userId, {
-        githubAccessToken: accessToken, // In production, encrypt this
+        githubAccessToken: encryptedToken,
         githubUsername: githubUser.login,
         githubId: githubUser.id.toString(),
       });
@@ -74,7 +80,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "GitHub account not connected" });
       }
 
-      const githubService = new GitHubService(user.githubAccessToken);
+      const token = isEncrypted(user.githubAccessToken) ? decryptText(user.githubAccessToken) : user.githubAccessToken;
+      const githubService = new GitHubService(token);
       const repositories = await githubService.getUserRepositories();
       
       res.json(repositories);
@@ -133,7 +140,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verify user has access to the repository
-      const githubService = new GitHubService(user.githubAccessToken);
+      const token = isEncrypted(user.githubAccessToken) ? decryptText(user.githubAccessToken) : user.githubAccessToken;
+      const githubService = new GitHubService(token);
       try {
         const repoData = await githubService.getRepository(repoInfo.owner, repoInfo.repo);
         
@@ -183,6 +191,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid project data", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to create project" });
+    }
+  });
+
+  // GitHub webhook handler for auto-deployments
+  // IMPORTANT: must capture raw body for signature verification
+  app.post('/api/webhooks/github', express.raw({ type: '*/*' }) as any, async (req: any, res) => {
+    try {
+      const signature = req.headers['x-hub-signature-256'] as string | undefined;
+      const rawBody = req.body instanceof Buffer ? req.body.toString('utf8') : '';
+      if (!verifyGitHubWebhookSignature(rawBody, signature)) {
+        return res.status(401).send('Invalid signature');
+      }
+
+      const event = req.headers['x-github-event'];
+      const payload = JSON.parse(rawBody);
+
+      if (event === 'push') {
+        const repoId = String(payload.repository?.id ?? '');
+        const branchRef: string = payload.ref || '';
+        const branch = branchRef.replace('refs/heads/', '');
+        const projectsForRepo = await storage.findProjectsByGithubRepoId(repoId);
+        const candidates = projectsForRepo.filter(p => (p.branch || 'main') === branch);
+        for (const project of candidates) {
+          const deployment = await storage.createDeployment({
+            projectId: project.id,
+            commitHash: payload.after || `push-${Date.now()}`,
+            commitMessage: payload.head_commit?.message || 'Auto-deploy from GitHub push',
+            branch,
+            status: 'queued',
+            startedAt: new Date(),
+          });
+          buildQueue.enqueue({ deploymentId: deployment.id, project: { id: project.id, name: project.name, branch: project.branch } });
+        }
+      }
+
+      res.status(200).json({ ok: true });
+    } catch (error) {
+      console.error('Webhook error:', error);
+      res.status(500).json({ message: 'Webhook processing failed' });
     }
   });
 
@@ -258,34 +305,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         startedAt: new Date(),
       });
       
-      // Start build process (simulated)
-      setTimeout(async () => {
-        try {
-          await storage.updateDeployment(deployment.id, {
-            status: 'building',
-            buildLogs: 'Building project...\nInstalling dependencies...\nRunning build command...\n',
-          });
-          
-          // Simulate build completion
-          setTimeout(async () => {
-            await storage.updateDeployment(deployment.id, {
-              status: 'success',
-              buildLogs: 'Building project...\nInstalling dependencies...\nRunning build command...\nBuild completed successfully!\n',
-              deployUrl: `https://${project.name.toLowerCase()}-${deployment.id}.gitship.app`,
-              previewUrl: `https://preview-${deployment.id}.gitship.app`,
-              buildTime: Math.floor(Math.random() * 120) + 30,
-              completedAt: new Date(),
-            });
-          }, 5000);
-        } catch (error) {
-          console.error("Build process failed:", error);
-          await storage.updateDeployment(deployment.id, {
-            status: 'failed',
-            buildLogs: 'Building project...\nInstalling dependencies...\nRunning build command...\nError: Build failed\n',
-            completedAt: new Date(),
-          });
-        }
-      }, 1000);
+      buildQueue.enqueue({ deploymentId: deployment.id, project: { id: project.id, name: project.name, branch: project.branch } });
       
       res.json(deployment);
     } catch (error) {
@@ -343,6 +363,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Add WebSocket support for real-time build logs
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+
+  function broadcastLog(deploymentId: number, message: string) {
+    const payload = JSON.stringify({ type: 'log', deploymentId: String(deploymentId), message });
+    wss.clients.forEach((client) => {
+      if ((client as any).deploymentId === String(deploymentId) && client.readyState === WebSocket.OPEN) {
+        client.send(payload);
+      }
+    });
+  }
   
   wss.on('connection', (ws) => {
     console.log('WebSocket client connected');
@@ -362,6 +391,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     ws.on('close', () => {
       console.log('WebSocket client disconnected');
     });
+  });
+
+  // Lightweight health endpoint
+  app.get('/api/health', (_req, res) => {
+    res.json({ status: 'ok', time: new Date().toISOString(), uptimeSec: Math.floor(process.uptime()) });
+  });
+
+  // Serve built artifacts for previews
+  app.get('/deployments/:id', async (req, res) => {
+    const id = parseInt(String(req.params.id));
+    if (Number.isNaN(id)) return res.status(400).send('Invalid id');
+    const root = getArtifactsRoot();
+    const file = path.join(root, String(id), 'index.html');
+    if (!fs.existsSync(file)) return res.status(404).send('Not found');
+    res.sendFile(file);
+  });
+
+  // Build queue with streaming logger
+  const buildQueue = new BuildQueue({
+    concurrency: 2,
+    onLog: broadcastLog,
   });
 
   return httpServer;

@@ -21,6 +21,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
+import { encryptText } from "./crypto";
 
 export interface IStorage {
   // User operations (required for Replit Auth)
@@ -35,6 +36,7 @@ export interface IStorage {
   // Project operations
   getUserProjects(userId: string): Promise<Project[]>;
   getProject(id: number): Promise<Project | undefined>;
+  findProjectsByGithubRepoId(repoId: string): Promise<Project[]>;
   createProject(project: InsertProject): Promise<Project>;
   updateProject(id: number, updates: Partial<InsertProject>): Promise<Project>;
   deleteProject(id: number): Promise<void>;
@@ -119,6 +121,13 @@ export class DatabaseStorage implements IStorage {
       .from(projects)
       .where(eq(projects.id, id));
     return project;
+  }
+
+  async findProjectsByGithubRepoId(repoId: string): Promise<Project[]> {
+    return await db
+      .select()
+      .from(projects)
+      .where(and(eq(projects.githubRepoId, repoId), eq(projects.isActive, true)));
   }
 
   async createProject(project: InsertProject): Promise<Project> {
@@ -258,13 +267,13 @@ export class DatabaseStorage implements IStorage {
       .values({
         projectId,
         key,
-        value, // In production, this should be encrypted
+        value: encryptText(value),
         isSecret: true,
       })
       .onConflictDoUpdate({
         target: [environmentVariables.projectId, environmentVariables.key],
         set: {
-          value,
+          value: encryptText(value),
           updatedAt: new Date(),
         },
       })
@@ -294,14 +303,14 @@ export class DatabaseStorage implements IStorage {
       .insert(teamSecrets)
       .values({
         key,
-        value, // In production, this should be encrypted
+        value: encryptText(value),
         description,
         createdBy,
       })
       .onConflictDoUpdate({
         target: teamSecrets.key,
         set: {
-          value,
+          value: encryptText(value),
           description,
           updatedAt: new Date(),
         },

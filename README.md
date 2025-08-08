@@ -12,6 +12,7 @@
 ### 🔥 Core Platform
 - **Dual Authentication**: Replit Auth (GitHub, Google, email) + GitHub OAuth for repository access
 - **GitHub Integration**: Native repository browser with search, filtering, and metadata display
+- **Encrypted Secrets**: At-rest encryption for tokens and secrets with `ENCRYPTION_KEY`
 - **Framework Auto-Detection**: Intelligent detection of React, Next.js, Vue, Nuxt, Astro, Svelte, Gatsby, Angular, and static sites
 - **Real-time Build Logs**: WebSocket-powered live build streaming with downloadable logs
 - **Team Collaboration**: Role-based team management with invitation system (ready for implementation)
@@ -52,6 +53,12 @@ SESSION_SECRET=your_session_secret
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
 GITHUB_WEBHOOK_SECRET=your_webhook_secret
+
+# Optional security and OIDC
+ENCRYPTION_KEY=32-byte-hex-or-base64
+REPLIT_DOMAINS=your.repl.domain
+ISSUER_URL=https://replit.com/oidc
+REPL_ID=your_replit_client_id
 ```
 
 ### GitHub OAuth Setup

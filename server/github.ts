@@ -1,4 +1,6 @@
 import { Octokit } from "@octokit/rest";
+import crypto from "crypto";
+import { encryptText } from "./crypto";
 
 export class GitHubService {
   private octokit: Octokit;
@@ -10,7 +12,7 @@ export class GitHubService {
   }
 
   static getAuthUrl() {
-    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientId = process.env.GITHUB_CLIENT_ID || process.env.GITHUB_ID;
     if (!clientId) {
       throw new Error("GITHUB_CLIENT_ID environment variable is required");
     }
@@ -22,8 +24,8 @@ export class GitHubService {
   }
 
   static async exchangeCodeForToken(code: string): Promise<string> {
-    const clientId = process.env.GITHUB_CLIENT_ID;
-    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+    const clientId = process.env.GITHUB_CLIENT_ID || process.env.GITHUB_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET || process.env.GITHUB_SECRET;
     
     if (!clientId || !clientSecret) {
       throw new Error("GitHub OAuth credentials not configured");
@@ -48,7 +50,8 @@ export class GitHubService {
       throw new Error(`GitHub OAuth error: ${data.error_description}`);
     }
 
-    return data.access_token;
+    // Store encrypted at-rest
+    return encryptText(data.access_token);
   }
 
   async getCurrentUser() {
@@ -174,4 +177,19 @@ export class GitHubService {
       return "static";
     }
   }
+}
+
+export function verifyGitHubWebhookSignature(rawBody: string, signatureHeader: string | undefined): boolean {
+  const secret = process.env.GITHUB_WEBHOOK_SECRET;
+  if (!secret || !signatureHeader) return false;
+
+  // GitHub sends sha256=<signature>
+  const [algo, hash] = signatureHeader.split("=");
+  if (algo !== "sha256" || !hash) return false;
+
+  const hmac = crypto.createHmac("sha256", secret);
+  hmac.update(rawBody, "utf8");
+  const expected = hmac.digest("hex");
+  // Use constant-time comparison
+  return crypto.timingSafeEqual(Buffer.from(hash, "hex"), Buffer.from(expected, "hex"));
 }
