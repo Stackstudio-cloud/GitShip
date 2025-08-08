@@ -8,6 +8,7 @@ import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import BuildLogs from "@/components/build-logs";
 import DeploymentCard from "@/components/deployment-card";
+import DeploymentPanel from "@/components/projects/DeploymentPanel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -308,37 +309,7 @@ export default function ProjectDetail() {
               </TabsList>
 
               <TabsContent value="deployments" className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Recent Deployments */}
-                  <Card className="bg-dark-800 border-dark-600">
-                    <CardHeader>
-                      <CardTitle className="text-lg font-semibold">Recent Deployments</CardTitle>
-                      <CardDescription>Track your deployment history and status</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4 max-h-96 overflow-y-auto">
-                        {deployments.length === 0 ? (
-                          <div className="text-center py-8 text-gray-400">
-                            <Rocket className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                            <p>No deployments yet</p>
-                            <p className="text-sm">Deploy your project to see it here</p>
-                          </div>
-                        ) : (
-                          deployments.map((deployment) => (
-                            <DeploymentCard 
-                              key={deployment.id} 
-                              deployment={deployment}
-                              onViewLogs={() => setActiveDeployment(deployment.id)}
-                            />
-                          ))
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Build Logs */}
-                  <BuildLogs deploymentId={activeDeployment || latestDeployment?.id || null} />
-                </div>
+                <DeploymentPanel projectId={projectId} />
               </TabsContent>
 
               <TabsContent value="functions" className="space-y-6">

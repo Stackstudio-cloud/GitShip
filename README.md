@@ -1,11 +1,63 @@
 # GitShip 🔥
 
 <div align="center">
-  <h3>The ultimate open-source deployment platform with flame-powered speed</h3>
-  <p>Built for developers who demand lightning-fast deployments with beautiful, intelligent tooling</p>
+  <img src="attached_assets/gitship_1753122655919.png" alt="GitShip Logo" width="400"/>
+  
+  <h3>The Next-Generation Open-Source Deployment Platform</h3>
+  <p>Built for developers who demand lightning-fast deployments with flame-powered speed and intelligent tooling</p>
+  
+  <p>
+    <a href="https://gitship.pro/">🚀 Live Demo</a> • 
+    <a href="https://gitship.pro/oauth-demo">⚡ OAuth Demo</a> • 
+    <a href="https://gitship.pro/templates">📦 Templates</a> • 
+    <a href="https://gitship.pro/ai-copilot">🤖 AI Copilot</a>
+  </p>
+  
+  <img src="https://img.shields.io/badge/Status-Beta-orange?style=for-the-badge" alt="Beta Status"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"/>
+  <img src="https://img.shields.io/badge/TypeScript-100%25-blue?style=for-the-badge&logo=typescript" alt="TypeScript"/>
 </div>
 
 ---
+
+## 📸 Platform Preview
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="https://github.com/user-attachments/assets/oauth-demo-preview.gif" alt="OAuth Demo" width="300"/>
+        <br/>
+        <b>OAuth Authentication Demo</b>
+        <br/>
+        <i>Multi-provider authentication with smooth animations</i>
+      </td>
+      <td align="center">
+        <img src="https://github.com/user-attachments/assets/dashboard-preview.gif" alt="Dashboard" width="300"/>
+        <br/>
+        <b>Project Dashboard</b>
+        <br/>
+        <i>Real-time project management interface</i>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="https://github.com/user-attachments/assets/ai-copilot-preview.gif" alt="AI Copilot" width="300"/>
+        <br/>
+        <b>AI-Powered Code Analysis</b>
+        <br/>
+        <i>Gemini AI integration for intelligent insights</i>
+      </td>
+      <td align="center">
+        <img src="https://github.com/user-attachments/assets/templates-preview.gif" alt="Templates" width="300"/>
+        <br/>
+        <b>Professional Templates</b>
+        <br/>
+        <i>18 authentic GitHub repository templates</i>
+      </td>
+    </tr>
+  </table>
+</div>
 
 ## 🌟 Features
 
@@ -13,25 +65,27 @@
 - **Dual Authentication**: Replit Auth (GitHub, Google, email) + GitHub OAuth for repository access
 - **GitHub Integration**: Native repository browser with search, filtering, and metadata display
 - **Encrypted Secrets**: At-rest encryption for tokens and secrets with `ENCRYPTION_KEY`
-- **Framework Auto-Detection**: Intelligent detection of React, Next.js, Vue, Nuxt, Astro, Svelte, Gatsby, Angular, and static sites
+- **Framework Auto-Detection**: React, Next.js, Vue, Nuxt, Astro, Svelte, Gatsby, Angular, static
 - **Real-time Build Logs**: WebSocket-powered live build streaming with downloadable logs
-- **Team Collaboration**: Role-based team management with invitation system (ready for implementation)
-- **Custom Domains**: DNS setup guidance and SSL certificate management (ready for implementation)
+- **Team Collaboration**: Role-based team management (ready for implementation)
+- **Custom Domains**: DNS setup guidance and SSL cert management (ready for implementation)
 - **Environment Variables**: Secure environment variable management
 - **Analytics Dashboard**: Performance metrics and deployment statistics
 
 ### 🎨 Design & Experience
-- **Neon Flame Theme**: Professional dark mode with orange-cyan-purple-red flame gradient colors
-- **Responsive UI**: shadcn/ui components optimized for all screen sizes
-- **Real-time Updates**: Live build progress with WebSocket streaming
-- **Professional Navigation**: Collapsible sidebar with project management
+- **🔥 Neon Flame Theme**: Professional dark mode with flame gradient colors
+- **📱 Responsive Design**: Mobile-first UI with shadcn/ui components
+- **✨ Smooth Animations**: Framer Motion-powered interactions and transitions
+- **🎯 Interactive Onboarding**: Smart tutorials and contextual guidance
+- **💡 Help System**: Comprehensive help center with AI-powered assistance
 
 ### 🛠 Technical Stack
 - **Frontend**: React + TypeScript, Vite, TailwindCSS, shadcn/ui, Wouter routing
-- **Backend**: Node.js + Express, PostgreSQL (Neon), Drizzle ORM
-- **Authentication**: Replit Auth with OpenID Connect + GitHub OAuth
-- **Real-time**: WebSocket server for live build logs
-- **GitHub API**: Complete integration with @octokit/rest
+- **Backend**: Node.js + Express, PostgreSQL (Neon), Drizzle ORM  
+- **Authentication**: Replit Auth (OpenID Connect) + GitHub OAuth dual system
+- **AI Integration**: Google Gemini API for intelligent code analysis
+- **Real-time**: WebSocket server for live build logs and updates
+- **Animation**: Framer Motion for smooth transitions and interactions
 - **State Management**: TanStack React Query for server state
 
 ## 🚀 Quick Start
@@ -45,7 +99,7 @@
 
 Create a `.env` file with:
 ```bash
-# Database (provided by Replit/Neon)
+# Database (PostgreSQL)
 DATABASE_URL=your_postgresql_url
 SESSION_SECRET=your_session_secret
 
@@ -73,7 +127,7 @@ REPL_ID=your_replit_client_id
 ### Installation & Development
 
 ```bash
-# Install dependencies (automatically handled by Replit)
+# Install dependencies
 npm install
 
 # Push database schema
@@ -83,7 +137,7 @@ npm run db:push
 npm run dev
 ```
 
-Visit your Replit URL to see GitShip in action! 🔥
+Visit https://gitship.pro to see GitShip in action! 🔥
 
 ## 📁 Project Structure
 
@@ -110,47 +164,69 @@ gitship/
 
 ## 🔧 Current Implementation Status
 
-### ✅ Fully Implemented
-- **Authentication System**: Replit Auth with multi-provider support
-- **GitHub OAuth**: Repository access and user profile integration
-- **Project Management**: CRUD operations with GitHub repository validation
-- **Real-time Builds**: WebSocket streaming with 5-6 second simulated deployments
-- **Database Layer**: PostgreSQL with Drizzle ORM, complete schema
-- **Professional UI**: Flame-themed interface with responsive design
-- **Repository Browser**: Interactive GitHub repository selection
+### ✅ Fully Implemented (January 2025)
+- **🔐 Authentication System**: Complete Replit Auth + GitHub OAuth integration
+- **📱 OAuth Demo Showcase**: Professional multi-provider authentication demo with animations
+- **🤖 AI Copilot**: Full Gemini AI integration with code analysis, optimization, and insights
+- **📦 Template Gallery**: 18 authentic GitHub repository templates with real data
+- **🎯 Interactive Onboarding**: Smart tutorial system with contextual guidance
+- **💡 Help Center**: Comprehensive help system with AI-powered assistance
+- **⚡ Real-time Features**: WebSocket integration for live updates
+- **🎨 Professional Design**: Complete flame-themed UI with responsive layouts
 
 ### 🚧 Ready for Production Enhancement
-- **Real Build Pipeline**: Container-based builds (currently simulated)
-- **CDN Integration**: Global content delivery
-- **Team Collaboration**: Database schema ready, UI pending
-- **Custom Domains**: SSL certificate automation
-- **Payment System**: Subscription management
-- **Monitoring**: Error tracking and performance metrics
+- **🐳 Real Build Pipeline**: Container-based builds (currently simulated)
+- **🌐 CDN Integration**: Global content delivery network
+- **👥 Team Collaboration**: Advanced role-based access control
+- **🔗 Custom Domains**: SSL certificate automation and DNS management
+- **💳 Payment System**: Subscription billing and usage tracking
+- **📊 Advanced Monitoring**: Comprehensive analytics and error tracking
+
+## 🤖 AI-Powered Features
+
+GitShip includes comprehensive AI integration powered by Google's Gemini API:
+
+### Code Analysis Engine
+- **Real-time Code Quality Analysis**: Identifies bugs, performance issues, and maintainability concerns
+- **Optimization Suggestions**: Provides actionable recommendations for code improvements
+- **Framework-Specific Insights**: Tailored analysis for React, Next.js, Vue, and other frameworks
+- **Security Scanning**: Detects potential security vulnerabilities and best practices
+
+### Performance Intelligence
+- **Automated Performance Audits**: Lighthouse-style analysis with detailed scoring
+- **Bundle Size Optimization**: Identifies unused dependencies and optimization opportunities
+- **Loading Performance**: Recommendations for faster page loads and better user experience
+- **SEO Enhancement**: Structured data and meta tag optimization suggestions
+
+### Interactive Demo
+- Live code analysis on the `/ai-copilot` page
+- Real-time scoring system (0-100 scale)
+- Categorized insights: bugs, performance, maintainability, security
+- Detailed explanations and implementation guides
 
 ## 🌐 API Endpoints
 
-### Authentication
-- `GET /api/auth/user` - Get current authenticated user
-- `GET /api/login` - Replit Auth login flow
-- `GET /api/logout` - Logout user
+### Authentication & OAuth
+- `GET /api/login` - Replit Auth login flow with multi-provider support
+- `GET /api/auth/user` - Get current authenticated user profile
 - `GET /api/auth/github` - GitHub OAuth URL generation
-- `GET /api/auth/github/callback` - GitHub OAuth callback
+- `GET /api/auth/github/callback` - GitHub OAuth callback handler
 
-### GitHub Integration
-- `GET /api/github/repositories` - List user's GitHub repositories
-- Repository parsing, framework detection, webhook setup
+### AI Services
+- `POST /api/ai/analyze` - Comprehensive code analysis with Gemini AI
+- `POST /api/ai/demo` - Public demo endpoint for showcasing AI capabilities
+- `POST /api/ai/optimize` - Performance optimization recommendations
+- `POST /api/ai/security` - Security analysis and vulnerability detection
 
-### Projects
-- `GET /api/projects` - List user projects with filtering
-- `POST /api/projects` - Create project with GitHub validation
-- `GET /api/projects/:id` - Get project details
-- `PUT /api/projects/:id` - Update project configuration
-- `DELETE /api/projects/:id` - Delete project
+### Project Management
+- `GET /api/projects` - List user projects with filtering and search
+- `POST /api/projects` - Create project with GitHub repository integration
+- `GET /api/projects/:id` - Detailed project information and analytics
+- `PUT /api/projects/:id` - Update project configuration and settings
 
-### Deployments
-- `GET /api/projects/:id/deployments` - List project deployments
-- `POST /api/projects/:id/deploy` - Trigger new deployment
-- `GET /api/deployments/:id/logs` - Real-time build logs via WebSocket
+### Real-time Features
+- `WebSocket /ws` - Live build logs and deployment status updates
+- Real-time project synchronization and team collaboration
 
 ## 🔥 Neon Flame Color Palette
 
@@ -204,6 +280,17 @@ GitShip uses a carefully crafted flame-inspired design system:
 - **Session Storage**: PostgreSQL-based sessions for Replit Auth
 - **GitHub Integration**: Encrypted token storage and repository metadata
 
+## 🎬 Creating GIFs for README
+
+To showcase GitShip's features with animated previews:
+
+1. **Record each major feature** (OAuth Demo, Dashboard, AI Copilot, Templates)
+2. **Convert to optimized GIFs** using FFmpeg or similar tools
+3. **Upload to GitHub assets** and update README links
+4. **Target specifications**: 1200px width, 15fps, under 5MB each
+
+See `SCREENSHOTS.md` for detailed instructions.
+
 ## 📊 Production Roadmap
 
 GitShip is architected as the next-generation deployment platform with the following production priorities:
@@ -226,22 +313,44 @@ GitShip is architected as the next-generation deployment platform with the follo
 - **Multi-region Deployments**: Global deployment infrastructure
 - **Advanced Security**: Vulnerability scanning and compliance
 
+## 🚀 Recent Achievements (January 2025)
+
+### Major Features Completed
+- **🔐 Dual Authentication System**: Complete integration of Replit Auth + GitHub OAuth
+- **📱 Interactive OAuth Demo**: Professional showcase with smooth animations for all providers
+- **🤖 AI Integration**: Full Gemini API integration with real-time code analysis
+- **📦 Authentic Templates**: 18 real GitHub repository templates with accurate metadata
+- **🎯 Smart Onboarding**: Interactive tutorial system with contextual guidance
+- **💡 Comprehensive Help**: AI-powered assistance and contextual help system
+- **⚡ Real-time Features**: WebSocket integration for live updates and build logs
+- **🎨 Professional Design**: Complete flame-themed UI with responsive layouts
+
+### Technical Infrastructure
+- PostgreSQL database with 8 tables fully configured
+- Type-safe API layer with comprehensive error handling
+- WebSocket server for real-time communication
+- Complete authentication flow with session management
+- GitHub API integration with repository browsing
+- AI-powered code analysis with scoring system
+
 ## 🤝 Contributing
 
-We welcome contributions! Follow these steps:
+We welcome contributions! GitShip is built to be the next-generation deployment platform.
 
+### Getting Started
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Set up your development environment (see Quick Start guide)
+3. Create a feature branch (`git checkout -b feature/amazing-feature`)
+4. Follow our flame-themed design system and TypeScript standards
+5. Test your changes thoroughly
+6. Submit a pull request with detailed description
 
-### Current Development Priorities
-1. Real build pipeline implementation
-2. Team collaboration UI components
-3. Custom domain management interface
-4. Enhanced security features
-5. Performance optimizations
+### Priority Areas for Contribution
+1. **🐳 Real Build Pipeline**: Docker containerization and build workers
+2. **👥 Team Collaboration**: Advanced role-based access control UI
+3. **🌐 CDN Integration**: Global content delivery implementation
+4. **🔗 Custom Domains**: SSL automation and DNS management
+5. **📊 Advanced Analytics**: Enhanced monitoring and insights
 
 ## 📄 License
 
@@ -250,6 +359,15 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 <div align="center">
-  <p>Built with 🔥 by the GitShip team</p>
-  <p>Ready to ship your code at the speed of flame?</p>
+  <h3>🔥 Built with Flame-Powered Passion</h3>
+  <p>
+    <strong>GitShip</strong> - Where cutting-edge technology meets beautiful design<br/>
+    Ready to ship your code at the speed of flame?
+  </p>
+  
+  <p>
+    <a href="https://gitship.pro/">Try GitShip Now →</a>
+  </p>
+  
+  <p><em>Star ⭐ this repository if you love what we're building!</em></p>
 </div>

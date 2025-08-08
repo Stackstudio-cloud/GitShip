@@ -11,7 +11,7 @@ export default function Landing() {
       {/* Hero Section */}
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          <h1 data-onboarding="hero-title" className="text-5xl md:text-6xl font-bold mb-6">
             Deploy with{" "}
             <span className="flame-gradient-text">Confidence</span>
           </h1>
@@ -20,6 +20,7 @@ export default function Landing() {
             Connect your GitHub repository and deploy at the speed of flame.
           </p>
           <Button 
+            data-onboarding="auth-button"
             onClick={() => window.location.href = '/api/login'}
             size="lg"
             className="flame-gradient text-dark-900 font-semibold text-lg px-8 py-4 hover:shadow-lg flame-glow transition-all duration-300"

@@ -24,10 +24,103 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import PublicNavbar from "@/components/public-navbar";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function AICopilotPage() {
   const [query, setQuery] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [activeDemo, setActiveDemo] = useState<string | null>(null);
+
+  // AI Analysis mutation (using demo endpoint)
+  const analyzeCodeMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/ai/demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Analysis failed');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAnalysis(data);
+      setIsAnalyzing(false);
+    },
+    onError: (error) => {
+      console.error('Analysis failed:', error);
+      setIsAnalyzing(false);
+    }
+  });
+
+  const runDemo = async (demoType: string) => {
+    setActiveDemo(demoType);
+    setIsAnalyzing(true);
+    
+    // Demo data for different analysis types
+    const demoData = {
+      'code-analysis': {
+        codeFiles: [
+          {
+            path: 'src/App.tsx',
+            content: `import React, { useState, useEffect } from 'react';
+import './App.css';
+
+function App() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    // Inefficient data fetching
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      });
+  }, []);
+
+  return (
+    <div className="App">
+      {loading ? 'Loading...' : (
+        <div>
+          {data.map((item, index) => (
+            <div key={index} onClick={() => console.log(item)}>
+              {item.name}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;`
+          },
+          {
+            path: 'package.json',
+            content: `{
+  "name": "demo-app",
+  "version": "0.1.0",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lodash": "^4.17.21"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  }
+}`
+          }
+        ]
+      }
+    };
+
+    if (demoType === 'code-analysis') {
+      analyzeCodeMutation.mutate();
+    }
+  };
 
   const aiFeatures = [
     {
@@ -140,7 +233,7 @@ export default function AICopilotPage() {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-neon-yellow to-neon-orange rounded-full mb-6">
             <Sparkles className="w-10 h-10 text-dark-900" />
           </div>
-          <h1 className="text-5xl font-bold mb-6">
+          <h1 data-onboarding="ai-title" className="text-5xl font-bold mb-6">
             AI <span className="flame-gradient-text">Copilot</span>
           </h1>
           <p className="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
@@ -253,7 +346,15 @@ export default function AICopilotPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {aiFeatures.map((feature, index) => (
-              <Card key={index} className="bg-dark-700 border-dark-600 hover:border-neon-orange/50 transition-all">
+              <Card 
+                key={index} 
+                data-onboarding={
+                  feature.title === "Code Quality Insights" ? "code-analysis-card" :
+                  feature.title === "Performance Intelligence" ? "performance-card" :
+                  undefined
+                }
+                className="bg-dark-700 border-dark-600 hover:border-neon-orange/50 transition-all"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between mb-4">
                     <div className={`w-12 h-12 bg-${feature.color}/20 rounded-lg flex items-center justify-center`}>
@@ -266,11 +367,114 @@ export default function AICopilotPage() {
                     {feature.description}
                   </CardDescription>
                 </CardHeader>
+                <CardContent>
+                  <div className="flex justify-center">
+                    {feature.title === "Code Quality Insights" && feature.status === "beta" ? (
+                      <Button 
+                        data-onboarding="demo-button"
+                        onClick={() => runDemo('code-analysis')}
+                        disabled={isAnalyzing}
+                        className="flame-gradient text-dark-900 font-semibold disabled:opacity-50"
+                      >
+                        {isAnalyzing && activeDemo === 'code-analysis' ? (
+                          <>
+                            <Bot className="w-4 h-4 mr-2 animate-spin" />
+                            Analyzing...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Try Demo
+                          </>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="border-gray-600 text-white hover:bg-dark-700"
+                        disabled={feature.status !== "active"}
+                      >
+                        {feature.status === "active" ? "Learn More" : "Coming Soon"}
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </div>
         </div>
       </section>
+
+      {/* AI Analysis Results */}
+      {analysis && (
+        <section className="py-20 px-6 bg-dark-800">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-6">
+                AI Analysis Results
+                <span className="ml-4 text-2xl">Score: {analysis.score}/100</span>
+              </h2>
+            </div>
+            
+            <div className="grid lg:grid-cols-2 gap-8 mb-12">
+              {/* Issues */}
+              <Card className="bg-dark-700 border-dark-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <AlertTriangle className="w-5 h-5 mr-2 text-neon-orange" />
+                    Issues Found ({analysis.issues?.length || 0})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {analysis.issues?.map((issue: any, index: number) => (
+                      <div key={index} className="border border-dark-500 rounded p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <Badge className={`${issue.severity === 'high' ? 'bg-red-600/20 text-red-400' : 
+                            issue.severity === 'medium' ? 'bg-neon-orange/20 text-neon-orange' : 
+                            'bg-neon-yellow/20 text-neon-yellow'}`}>
+                            {issue.severity} {issue.type}
+                          </Badge>
+                        </div>
+                        <p className="text-white text-sm mb-1">{issue.message}</p>
+                        <p className="text-gray-400 text-xs">{issue.suggestion}</p>
+                        {issue.file && <p className="text-neon-cyan text-xs mt-1">{issue.file}:{issue.line}</p>}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Optimizations */}
+              <Card className="bg-dark-700 border-dark-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Rocket className="w-5 h-5 mr-2 text-neon-purple" />
+                    Optimizations ({analysis.optimizations?.length || 0})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {analysis.optimizations?.map((opt: any, index: number) => (
+                      <div key={index} className="border border-dark-500 rounded p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <Badge className={`${opt.impact === 'high' ? 'bg-green-600/20 text-green-400' : 
+                            opt.impact === 'medium' ? 'bg-neon-orange/20 text-neon-orange' : 
+                            'bg-gray-600/20 text-gray-400'}`}>
+                            {opt.impact} impact {opt.type}
+                          </Badge>
+                        </div>
+                        <p className="text-white text-sm mb-1">{opt.description}</p>
+                        <p className="text-gray-400 text-xs">{opt.implementation}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Recent Insights */}
       <section className="py-16 px-6">

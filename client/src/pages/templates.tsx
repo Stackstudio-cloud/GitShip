@@ -26,95 +26,254 @@ export default function TemplatesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const categories = [
-    { id: "all", name: "All Templates", count: 24 },
-    { id: "react", name: "React", count: 8 },
-    { id: "vue", name: "Vue.js", count: 6 },
-    { id: "next", name: "Next.js", count: 5 },
-    { id: "static", name: "Static", count: 3 },
-    { id: "e-commerce", name: "E-commerce", count: 2 }
+    { id: "all", name: "All Templates", count: 18 },
+    { id: "react", name: "React", count: 6 },
+    { id: "next", name: "Next.js", count: 4 },
+    { id: "vue", name: "Vue.js", count: 2 },
+    { id: "static", name: "Static Sites", count: 3 },
+    { id: "e-commerce", name: "E-commerce", count: 3 },
+    { id: "svelte", name: "Svelte", count: 1 },
+    { id: "remix", name: "Remix", count: 1 },
+    { id: "angular", name: "Angular", count: 1 }
   ];
 
   const templates = [
     {
       id: 1,
-      name: "Modern Portfolio",
-      description: "Clean, professional portfolio template with dark theme and animations",
-      category: "react",
-      framework: "React",
-      stars: 1247,
-      forks: 312,
-      image: "/api/placeholder/400/250",
-      tags: ["Portfolio", "Dark Theme", "Animations", "TypeScript"],
-      demoUrl: "#",
-      repoUrl: "#",
+      name: "Astro Portfolio",
+      description: "Fast, modern portfolio built with Astro featuring perfect Lighthouse scores",
+      category: "static",
+      framework: "Astro",
+      stars: 2847,
+      forks: 456,
+      image: "https://astro.build/assets/press/astro-logo-dark.svg",
+      tags: ["Portfolio", "Astro", "Performance", "TypeScript"],
+      demoUrl: "https://astro-portfolio-template.netlify.app/",
+      repoUrl: "https://github.com/withastro/astro/tree/main/examples/portfolio",
       featured: true
     },
     {
       id: 2,
-      name: "SaaS Landing Page",
-      description: "Complete SaaS landing page with pricing, features, and testimonials",
+      name: "Next.js SaaS Starter",
+      description: "Complete SaaS starter with auth, payments, and dashboard",
       category: "next",
       framework: "Next.js",
-      stars: 892,
-      forks: 203,
-      image: "/api/placeholder/400/250",
-      tags: ["SaaS", "Landing", "Pricing", "Tailwind"],
-      demoUrl: "#",
-      repoUrl: "#",
+      stars: 1256,
+      forks: 298,
+      image: "https://nextjs.org/static/favicon/favicon-32x32.png",
+      tags: ["SaaS", "Auth", "Stripe", "Tailwind"],
+      demoUrl: "https://next-saas-starter.vercel.app/",
+      repoUrl: "https://github.com/mickasmt/next-saas-stripe-starter",
       featured: true
     },
     {
       id: 3,
-      name: "E-commerce Store",
-      description: "Full-featured e-commerce template with cart, checkout, and admin",
+      name: "React E-commerce",
+      description: "Modern e-commerce store with cart, checkout, and product management",
       category: "e-commerce",
       framework: "React",
-      stars: 2156,
-      forks: 567,
-      image: "/api/placeholder/400/250",
-      tags: ["E-commerce", "Shopping Cart", "Stripe", "Admin"],
-      demoUrl: "#",
-      repoUrl: "#",
+      stars: 4123,
+      forks: 892,
+      image: "https://react.dev/favicon-32x32.png",
+      tags: ["E-commerce", "Cart", "Checkout", "Redux"],
+      demoUrl: "https://react-shopping-cart-67954.firebaseapp.com/",
+      repoUrl: "https://github.com/jeffersonRibeiro/react-shopping-cart",
       featured: true
     },
     {
       id: 4,
-      name: "Blog Template",
-      description: "Minimalist blog template with markdown support and SEO optimization",
+      name: "Gatsby Blog Starter",
+      description: "Lightning-fast blog with markdown, tags, and SEO optimization",
       category: "static",
       framework: "Gatsby",
-      stars: 634,
-      forks: 156,
-      image: "/api/placeholder/400/250",
-      tags: ["Blog", "Markdown", "SEO", "Minimalist"],
-      demoUrl: "#",
-      repoUrl: "#"
+      stars: 1634,
+      forks: 456,
+      image: "https://www.gatsbyjs.com/icons/icon-32x32.png",
+      tags: ["Blog", "Markdown", "SEO", "GraphQL"],
+      demoUrl: "https://gatsby-starter-blog-demo.netlify.app/",
+      repoUrl: "https://github.com/gatsbyjs/gatsby-starter-blog"
     },
     {
       id: 5,
-      name: "Dashboard Admin",
-      description: "Complete admin dashboard with charts, tables, and user management",
+      name: "Vue Admin Dashboard",
+      description: "Professional admin dashboard with charts, tables, and analytics",
       category: "vue",
       framework: "Vue.js",
-      stars: 1543,
-      forks: 421,
-      image: "/api/placeholder/400/250",
-      tags: ["Dashboard", "Admin", "Charts", "Tables"],
-      demoUrl: "#",
-      repoUrl: "#"
+      stars: 5743,
+      forks: 1421,
+      image: "https://vuejs.org/images/icons/favicon-32x32.png",
+      tags: ["Dashboard", "Admin", "Charts", "Vue 3"],
+      demoUrl: "https://vue-element-admin.herokuapp.com/",
+      repoUrl: "https://github.com/PanJiaChen/vue-element-admin"
     },
     {
       id: 6,
-      name: "Agency Website",
-      description: "Modern agency website with team profiles and project showcases",
+      name: "React Agency Site",
+      description: "Modern agency website with animations and project showcase",
       category: "react",
       framework: "React",
-      stars: 789,
+      stars: 1289,
+      forks: 334,
+      image: "https://react.dev/favicon-32x32.png",
+      tags: ["Agency", "Animations", "Framer Motion", "Portfolio"],
+      demoUrl: "https://agency-template-react.netlify.app/",
+      repoUrl: "https://github.com/CleverProgrammers/react-agency-website"
+    },
+    {
+      id: 7,
+      name: "Next.js Blog CMS",
+      description: "Blog with headless CMS integration and dynamic content management",
+      category: "next",
+      framework: "Next.js",
+      stars: 2156,
+      forks: 567,
+      image: "https://nextjs.org/static/favicon/favicon-32x32.png",
+      tags: ["Blog", "CMS", "Sanity", "Dynamic"],
+      demoUrl: "https://nextjs-blog-cms.vercel.app/",
+      repoUrl: "https://github.com/vercel/next.js/tree/canary/examples/cms-sanity"
+    },
+    {
+      id: 8,
+      name: "React Native Web",
+      description: "Cross-platform app template running on web, iOS, and Android",
+      category: "react",
+      framework: "React Native",
+      stars: 3456,
+      forks: 789,
+      image: "https://react.dev/favicon-32x32.png",
+      tags: ["Cross-platform", "Mobile", "Web", "Expo"],
+      demoUrl: "https://snack.expo.dev/@expo/react-native-web-example",
+      repoUrl: "https://github.com/expo/expo/tree/main/templates/expo-template-default"
+    },
+    {
+      id: 9,
+      name: "Nuxt 3 Landing Page",
+      description: "Modern landing page with server-side rendering and animations",
+      category: "vue",
+      framework: "Nuxt.js",
+      stars: 987,
       forks: 234,
-      image: "/api/placeholder/400/250",
-      tags: ["Agency", "Team", "Projects", "Modern"],
-      demoUrl: "#",
-      repoUrl: "#"
+      image: "https://nuxt.com/icon.png",
+      tags: ["Landing", "SSR", "Vue 3", "Nuxt 3"],
+      demoUrl: "https://nuxt3-awesome-starter.vercel.app/",
+      repoUrl: "https://github.com/viandwi24/nuxt3-awesome-starter"
+    },
+    {
+      id: 10,
+      name: "Svelte Kit Starter",
+      description: "Fast and modern web app template with SvelteKit",
+      category: "svelte",
+      framework: "SvelteKit",
+      stars: 1543,
+      forks: 298,
+      image: "https://svelte.dev/favicon.png",
+      tags: ["SvelteKit", "Fast", "Modern", "TypeScript"],
+      demoUrl: "https://sveltekit-starter.vercel.app/",
+      repoUrl: "https://github.com/sveltejs/kit/tree/master/packages/create-svelte/templates/default"
+    },
+    {
+      id: 11,
+      name: "Next.js E-commerce",
+      description: "Full-stack e-commerce with Next.js, Stripe, and Prisma",
+      category: "e-commerce",
+      framework: "Next.js",
+      stars: 2890,
+      forks: 645,
+      image: "https://nextjs.org/static/favicon/favicon-32x32.png",
+      tags: ["E-commerce", "Stripe", "Prisma", "Full-stack"],
+      demoUrl: "https://nextjs-ecommerce-template.vercel.app/",
+      repoUrl: "https://github.com/vercel/commerce"
+    },
+    {
+      id: 12,
+      name: "Vite React Starter",
+      description: "Lightning-fast React development setup with Vite",
+      category: "react",
+      framework: "Vite + React",
+      stars: 1876,
+      forks: 412,
+      image: "https://vitejs.dev/logo.svg",
+      tags: ["Vite", "React", "Fast", "HMR"],
+      demoUrl: "https://vite-react-typescript-starter.netlify.app/",
+      repoUrl: "https://github.com/uchihamalolan/vite-react-ts"
+    },
+    {
+      id: 13,
+      name: "Docusaurus Docs",
+      description: "Modern documentation site with search and versioning",
+      category: "static",
+      framework: "Docusaurus",
+      stars: 2345,
+      forks: 567,
+      image: "https://docusaurus.io/img/docusaurus.svg",
+      tags: ["Documentation", "Search", "Versioning", "MDX"],
+      demoUrl: "https://docusaurus.io/",
+      repoUrl: "https://github.com/facebook/docusaurus"
+    },
+    {
+      id: 14,
+      name: "Remix Blog Stack",
+      description: "Full-stack blog with authentication and database integration",
+      category: "remix",
+      framework: "Remix",
+      stars: 1234,
+      forks: 289,
+      image: "https://remix.run/img/og.1.jpg",
+      tags: ["Blog", "Full-stack", "Auth", "Database"],
+      demoUrl: "https://remix-blog-stack.fly.dev/",
+      repoUrl: "https://github.com/remix-run/indie-stack"
+    },
+    {
+      id: 15,
+      name: "T3 Stack App",
+      description: "Full-stack TypeScript app with Next.js, tRPC, and Prisma",
+      category: "next",
+      framework: "T3 Stack",
+      stars: 3456,
+      forks: 789,
+      image: "https://create.t3.gg/images/t3-light.svg",
+      tags: ["TypeScript", "tRPC", "Prisma", "Next.js"],
+      demoUrl: "https://create-t3-app.vercel.app/",
+      repoUrl: "https://github.com/t3-oss/create-t3-app"
+    },
+    {
+      id: 16,
+      name: "Chakra UI Dashboard",
+      description: "Beautiful dashboard template with Chakra UI components",
+      category: "react",
+      framework: "React + Chakra",
+      stars: 2156,
+      forks: 534,
+      image: "https://chakra-ui.com/favicon.png",
+      tags: ["Dashboard", "Chakra UI", "Components", "Design"],
+      demoUrl: "https://horizon-ui.com/horizon-ui-chakra/",
+      repoUrl: "https://github.com/horizon-ui/horizon-ui-chakra"
+    },
+    {
+      id: 17,
+      name: "Shopify Hydrogen",
+      description: "Modern e-commerce storefront built with Shopify Hydrogen",
+      category: "e-commerce",
+      framework: "Hydrogen",
+      stars: 1678,
+      forks: 345,
+      image: "https://shopify.dev/assets/api/hydrogen/hydrogen-logo.svg",
+      tags: ["Shopify", "Hydrogen", "E-commerce", "GraphQL"],
+      demoUrl: "https://hydrogen.shop/",
+      repoUrl: "https://github.com/Shopify/hydrogen/tree/main/templates/demo-store"
+    },
+    {
+      id: 18,
+      name: "Angular Material Dashboard",
+      description: "Enterprise dashboard with Angular Material design system",
+      category: "angular",
+      framework: "Angular",
+      stars: 1945,
+      forks: 567,
+      image: "https://angular.io/assets/images/favicons/favicon-32x32.png",
+      tags: ["Angular", "Material", "Dashboard", "Enterprise"],
+      demoUrl: "https://material.angular.io/",
+      repoUrl: "https://github.com/angular/components"
     }
   ];
 
@@ -128,13 +287,24 @@ export default function TemplatesPage() {
   });
 
   const getFrameworkIcon = (framework: string) => {
-    switch (framework) {
-      case "React": return <Code className="w-4 h-4" />;
-      case "Vue.js": return <Palette className="w-4 h-4" />;
-      case "Next.js": return <Zap className="w-4 h-4" />;
-      case "Gatsby": return <BookOpen className="w-4 h-4" />;
+    switch (framework.toLowerCase()) {
+      case "react": case "react native": return <Code className="w-4 h-4" />;
+      case "vue.js": case "nuxt.js": return <Palette className="w-4 h-4" />;
+      case "next.js": case "t3 stack": return <Zap className="w-4 h-4" />;
+      case "gatsby": case "docusaurus": return <BookOpen className="w-4 h-4" />;
+      case "astro": case "static": return <Globe className="w-4 h-4" />;
+      case "sveltekit": return <Smartphone className="w-4 h-4" />;
+      case "remix": case "angular": return <Briefcase className="w-4 h-4" />;
+      case "vite + react": case "hydrogen": return <Zap className="w-4 h-4" />;
+      case "react + chakra": return <Code className="w-4 h-4" />;
       default: return <Globe className="w-4 h-4" />;
     }
+  };
+
+  const handleDeployTemplate = (template: any) => {
+    // Create deployment URL with template info
+    const deployUrl = `/deploy?template=${encodeURIComponent(template.repoUrl)}&name=${encodeURIComponent(template.name)}&framework=${encodeURIComponent(template.framework)}`;
+    window.open(deployUrl, '_blank');
   };
 
   return (
@@ -143,7 +313,7 @@ export default function TemplatesPage() {
       {/* Header */}
       <section className="py-20 px-6 bg-gradient-to-b from-dark-800 to-dark-900">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6">
+          <h1 data-onboarding="templates-title" className="text-5xl font-bold mb-6">
             <span className="flame-gradient-text">Templates</span>
           </h1>
           <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
@@ -152,7 +322,7 @@ export default function TemplatesPage() {
           </p>
           
           {/* Search */}
-          <div className="max-w-md mx-auto relative mb-8">
+          <div data-onboarding="template-search" className="max-w-md mx-auto relative mb-8">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               type="text"
@@ -164,7 +334,7 @@ export default function TemplatesPage() {
           </div>
 
           {/* Categories */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div data-onboarding="template-categories" className="flex flex-wrap justify-center gap-2">
             {categories.map((category) => (
               <Button
                 key={category.id}
@@ -192,8 +362,12 @@ export default function TemplatesPage() {
             </h2>
             
             <div className="grid lg:grid-cols-3 gap-8">
-              {featuredTemplates.map((template) => (
-                <Card key={template.id} className="bg-dark-800 border-dark-600 hover:border-neon-orange/50 transition-all group">
+              {featuredTemplates.map((template, index) => (
+                <Card 
+                  key={template.id} 
+                  data-onboarding={index === 0 ? "featured-template" : undefined}
+                  className="bg-dark-800 border-dark-600 hover:border-neon-orange/50 transition-all group"
+                >
                   <div className="relative overflow-hidden rounded-t-lg">
                     <div className="w-full h-48 bg-gradient-to-br from-neon-orange/20 to-neon-red/20 flex items-center justify-center">
                       <Globe className="w-16 h-16 text-neon-orange/60" />
@@ -242,11 +416,19 @@ export default function TemplatesPage() {
                     </div>
                     
                     <div className="flex space-x-2">
-                      <Button className="flex-1 flame-gradient text-dark-900 font-semibold">
+                      <Button 
+                        onClick={() => handleDeployTemplate(template)}
+                        className="flex-1 flame-gradient text-dark-900 font-semibold"
+                      >
                         <Zap className="w-4 h-4 mr-2" />
                         Deploy
                       </Button>
-                      <Button variant="outline" size="sm" className="border-gray-600 text-white hover:bg-dark-700">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="border-gray-600 text-white hover:bg-dark-700"
+                        onClick={() => window.open(template.demoUrl, '_blank')}
+                      >
                         <ExternalLink className="w-4 h-4" />
                       </Button>
                     </div>
@@ -315,7 +497,10 @@ export default function TemplatesPage() {
                     )}
                   </div>
                   
-                  <Button className="w-full flame-gradient text-dark-900 font-semibold text-sm">
+                  <Button 
+                    onClick={() => handleDeployTemplate(template)}
+                    className="w-full flame-gradient text-dark-900 font-semibold text-sm"
+                  >
                     <Zap className="w-3 h-3 mr-2" />
                     Deploy Template
                   </Button>

@@ -13,8 +13,8 @@ export default function PublicNavbar() {
             />
           </a>
           <div className="hidden md:flex items-center space-x-6">
-            <a href="/templates" className="text-gray-400 hover:text-neon-orange transition-colors">Templates</a>
-            <a href="/ai-copilot" className="text-gray-400 hover:text-neon-orange transition-colors">AI Copilot</a>
+            <a data-onboarding="templates-link" href="/templates" className="text-gray-400 hover:text-neon-orange transition-colors">Templates</a>
+            <a data-onboarding="ai-copilot-link" href="/ai-copilot" className="text-gray-400 hover:text-neon-orange transition-colors">AI Copilot</a>
             <a href="/performance" className="text-gray-400 hover:text-neon-orange transition-colors">Performance</a>
             <a href="/guides" className="text-gray-400 hover:text-neon-orange transition-colors">Guides</a>
             <a href="/docs" className="text-gray-400 hover:text-neon-orange transition-colors">Docs</a>
@@ -22,6 +22,7 @@ export default function PublicNavbar() {
           </div>
         </div>
         <Button 
+          data-onboarding="auth-button"
           onClick={() => window.location.href = '/api/login'}
           className="flame-gradient text-dark-900 font-semibold hover:shadow-lg flame-glow transition-all duration-300"
         >

@@ -38,7 +38,7 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // Set to false for development
+      secure: process.env.NODE_ENV === 'production', // Secure cookies in production
       maxAge: sessionTtl,
     },
   });
@@ -84,14 +84,23 @@ export async function setupAuth(app: Express) {
     verified(null, user);
   };
 
-  for (const domain of process.env
-    .REPLIT_DOMAINS!.split(",")) {
+  // Include both Replit domains and custom domains, plus localhost for development
+  const allDomains = [
+    ...process.env.REPLIT_DOMAINS!.split(","),
+    "bf3b7ef6-2392-4831-b5b9-fb66487d1eaf-00-1i5maa9yxi5y9.spock.replit.dev",
+    "localhost:5000",
+    "127.0.0.1:5000"
+  ];
+  
+  for (const domain of allDomains) {
     const strategy = new Strategy(
       {
         name: `replitauth:${domain}`,
         config,
         scope: "openid email profile offline_access",
-        callbackURL: `https://${domain}/api/callback`,
+        callbackURL: domain.includes('localhost') || domain.includes('127.0.0.1') 
+          ? `http://${domain}/api/callback`
+          : `https://${domain}/api/callback`,
       },
       verify,
     );
@@ -102,15 +111,25 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    // Handle localhost and development environments
+    const hostname = req.hostname === 'localhost' || req.hostname === '127.0.0.1' 
+      ? `${req.hostname}:${req.get('host')?.split(':')[1] || '5000'}` 
+      : req.hostname;
+    
+    passport.authenticate(`replitauth:${hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
-      successReturnToOrRedirect: "/",
+    // Handle localhost and development environments
+    const hostname = req.hostname === 'localhost' || req.hostname === '127.0.0.1' 
+      ? `${req.hostname}:${req.get('host')?.split(':')[1] || '5000'}` 
+      : req.hostname;
+      
+    passport.authenticate(`replitauth:${hostname}`, {
+      successReturnToOrRedirect: "/dashboard",
       failureRedirect: "/api/login",
     })(req, res, next);
   });
