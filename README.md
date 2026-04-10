@@ -1,4 +1,4 @@
-# GitShip 🔥
+# GitShip  🔥
 
 <div align="center">
   <img src="attached_assets/gitship_1753122655919.png" alt="GitShip Logo" width="400"/>
